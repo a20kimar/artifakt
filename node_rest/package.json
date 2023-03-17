@@ -1,0 +1,27 @@
+{
+  "name": "node_rest",
+  "version": "1.0.0",
+  "description": "Rest API Artifact",
+  "main": "index.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a20kimar/artifakt.git"
+  },
+  "keywords": [
+    "REST",
+    "API"
+  ],
+  "author": "Kimmie Arvidsson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/a20kimar/artifakt/issues"
+  },
+  "homepage": "https://github.com/a20kimar/artifakt#readme",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  }
+}
