@@ -1,2 +1,4 @@
 node_rest/.env
 node_rest/node_modules
+node_graphql/.env
+node_graphql/node_modules
