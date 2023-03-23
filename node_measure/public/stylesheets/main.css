@@ -1,0 +1,40 @@
+
+:root {
+    font-family: 'Rubik';
+    font-size: 20px;
+    color: var(--color-text-light);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin:0;
+    /*background: linear-gradient(to bottom,gray, darkgray);*/
+}
+
+.container {
+    width:70%;
+    margin:auto;
+    margin-bottom:3rem;
+    margin-top:3rem;
+    background-color: gray;
+    border-radius: 5px;
+    justify-content: center;
+    gap: 5rem;
+    display:flex;
+}
+
+.container-inner {
+    background-color:blue;
+    padding: 2rem;
+}
+
+
+.container-inner h2 {
+    font-size: 2rem;
+    font-weight: 500;
+    margin:0 0 1rem 0;
+    padding:0;
+}

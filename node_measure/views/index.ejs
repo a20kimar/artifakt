@@ -1,0 +1,26 @@
+<div class="container-inner">
+    <h2>Test REST</h2>
+    <div class="results">
+        <table>
+
+            <tr>
+                <th>Info</th>
+                <th>Info 2</th>
+            </tr>
+        <% info.forEach(cell => { %>
+            <tr>
+                <td><%= cell.time %></td>
+                <td><%= cell.measure %></td>
+            </tr>
+        <% }) %>
+        </table>
+    </div>
+</div>
+<div class="container-inner">
+    <h2>Test GraphQL</h2>
+    <div class="results">
+        <table>
+
+        </table>
+    </div>
+</div>
