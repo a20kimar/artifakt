@@ -7,9 +7,19 @@ router.get('/', (req, res) => {
 })
 
 router.get('/rest', async (req, res) => {
+    const info = []
+    res.render("index", {
+        info: info
+    });
+})
 
-    const info = await measure.rest();
-    console.info(info)
+router.post('/measure', async (req, res) => {
+    let info = [];
+    if (req.body.apiType > 0) {
+        info = await measure.rest(req.body.endpoint, req.body.iterations)
+    } else {
+        /* GraphQL fetch */
+    }
     res.render("index", {
         info: info
     });
