@@ -3,6 +3,30 @@ const firstNames = ['Alice', 'Bob', 'Charlie', 'David', 'Emma', 'Frank', 'Grace'
 const lastNames = ['Anderson', 'Brown', 'Chen', 'Davis', 'Evans', 'Fisher', 'Garcia', 'Harris', 'Isaacs', 'Johnson', 'Kim', 'Lopez', 'Miller', 'Nguyen', 'Owens', 'Patel', 'Robinson', 'Smith', 'Taylor', 'Unger', 'Vargas', 'White', 'Xiong', 'Yang', 'Zhang'];
 const cities = ['New York', 'London', 'Tokyo', 'Paris', 'Berlin', 'Sydney', 'Moscow', 'Mumbai', 'Rio de Janeiro', 'Toronto', 'Shanghai', 'Seoul', 'Dubai', 'Singapore', 'Hong Kong', 'Barcelona', 'Rome', 'Los Angeles', 'San Francisco', 'Cape Town', 'Vancouver', 'Zurich', 'Amsterdam', 'Vienna', 'Buenos Aires', 'Bangkok', 'Istanbul', 'Stockholm', 'Oslo', 'Copenhagen', 'Helsinki', 'Dublin', 'Edinburgh', 'Brussels', 'Madrid', 'Lisbon', 'Athens', 'Prague', 'Krakow', 'Budapest', 'Warsaw', 'Dubrovnik', 'Reykjavik', 'Havana', 'Mexico City', 'Santiago', 'Bogota', 'Lima', 'Caracas', 'Kuala Lumpur', 'Phnom Penh', 'Hanoi', 'Marrakech', 'Cairo', 'Tel Aviv', 'Jerusalem', 'Beijing', 'Ho Chi Minh City', 'Manila', 'Jakarta', 'New Delhi', 'Kolkata', 'Bengaluru', 'Chennai', 'Hyderabad', 'Islamabad', 'Karachi', 'Lahore', 'Tehran', 'Baghdad', 'Riyadh', 'Jeddah', 'Abu Dhabi', 'Doha', 'Kuwait City', 'Muscat', 'Nairobi', 'Dar es Salaam', 'Cape Town', 'Johannesburg', 'Casablanca', 'Tunis', 'Algiers', 'Accra', 'Lagos', 'Nairobi', 'Dakar', 'Kinshasa', 'Luanda', 'Kigali', 'Yaounde', 'Abidjan', 'Conakry', 'Lubumbashi', 'Freetown'];
 const positions = ['CEO', 'COO', 'CFO', 'CTO', 'CMO', 'VP of Sales', 'VP of Marketing', 'VP of Operations', 'Director of Finance', 'Director of HR', 'Project Manager', 'Software Engineer', 'Data Analyst', 'Sales Representative', 'Customer Service Representative'];
+const companyNames = [
+    "Novelty Works",
+    "Innovation Labs",
+    "Vibrant Ventures",
+    "Prosperity Partners",
+    "Peak Performance Co.",
+    "Infinity Solutions",
+    "Elevate Enterprises",
+    "Vantage Point Inc.",
+    "Pinnacle Products",
+    "Synergy Services",
+    "Crest Enterprises",
+    "Horizon Holdings",
+    "Forward Focus Inc.",
+    "Apex Associates",
+    "Spectrum Solutions",
+    "Latitude LLC",
+    "Summit Strategies",
+    "Bridge Builders",
+    "Venture Velocity",
+    "Triumph Technologies",
+    "Global Growth Group"
+];
+
 
 const generateNames = () => {
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
@@ -67,7 +91,7 @@ const generateSSID = () => {
 }
 const generateCompany = () => {
     const min = 1;
-    const max = 25;
+    const max = 250;
     return generateRandomNumber(min, max);
 }
 const generateRate = () => {
@@ -79,6 +103,29 @@ const generateStatus = () => {
     const status = [100, 300, 500]
 
     return status[Math.floor(Math.random() * status.length)]
+}
+const generateCode = (companyName) => {
+    const words = companyName.split(" ")
+    let abbreviation = ""
+
+    abbreviation += words[0][0].toUpperCase()
+    if (words.length > 1) {
+        abbreviation += words[1][0].toUpperCase()
+        if (words[2]) {
+            abbreviation += words[2][0].toUpperCase()
+        } else {
+            abbreviation += words[0][words[0].length - 1].toUpperCase()
+        }
+    } else {
+        abbreviation += words[0][words[0].length - 1].toUpperCase()
+    }
+
+    return abbreviation;
+}
+
+const generateCompanyName = () => {
+
+    return companyNames[Math.floor(Math.random() * companyNames.length)]
 }
 
 module.exports = {
@@ -94,5 +141,7 @@ module.exports = {
     ssid: generateSSID,
     company: generateCompany,
     rate: generateRate,
-    status: generateStatus
+    status: generateStatus,
+    generateCode: generateCode,
+    generateCompanyName: generateCompanyName
 }

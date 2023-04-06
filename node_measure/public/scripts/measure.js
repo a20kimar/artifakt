@@ -1,11 +1,15 @@
 const axios = require('axios')
 
-const measureRest = async (id, iterations) => {
-    /* Put Code to measure REST API */
-    let endpoint = "/employees/"
-    if (id != null && id !== '') {
+const measureRest = async (id, iterations, fId) => {
+    /* Id is the endpoint id, fId is the database entry id */
+    let endpoint = "/rest/"
+    if (id != null && id !== '' && typeof id !== 'undefined') {
         endpoint += id;
     }
+    if (fId != null && fId !== '' && typeof fId !== 'undefined') {
+        endpoint += "/" + fId;
+    }
+    console.log(endpoint)
     const objects = []
     for (let i = 0; i < iterations; i++) {
         const startTime = performance.now();
@@ -13,7 +17,7 @@ const measureRest = async (id, iterations) => {
             .then(response => {
                 const endTime = performance.now();
                 const responseTime = endTime - startTime;
-                objects.push({ time: responseTime.toFixed(2) + " ms", measure: endpoint, content: response.data.length })
+                objects.push({ time: responseTime.toFixed(2) + " ms", endpoints: endpoint, items: response.data.length })
             })
             .catch(error => {
                 console.error(error);

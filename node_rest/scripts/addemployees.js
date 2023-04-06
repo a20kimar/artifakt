@@ -19,8 +19,8 @@ const addEmployee = () => {
     const rate = generateData.rate()
     const status = generateData.status()
 
-    let sql = `INSERT INTO Employees(fName, lName, area, position, birthday, gender, philhealth, hiringdate, pagibid, rate, status, company, tin, ssid) VALUES(${names[0]}, ${names[1]}, ${area}, ${position}, ${birthday}, ${gender}, ${philhealth}, ${hiringdate}, ${pagibid}, ${rate}, ${status}, ${company}, ${tin}, ${ssid})`
-    /*return new Promise((resolve, reject) => {
+    let sql = `INSERT INTO Employees(fName, lName, area, position, birthday, gender, philhealth, hiringdate, pagibig, rate, status, company, tin, ssid) VALUES('${names[0]}', '${names[1]}', '${area}', '${position}', '${birthday}', ${gender}, '${philhealth}', '${hiringdate}', '${pagibid}', '${rate}', ${status}, ${company}, '${tin}', '${ssid}')`
+    return new Promise((resolve, reject) => {
         connection.query(sql, (error, res) => {
             if (error) {
                 console.error("Error: ", error)
@@ -29,10 +29,29 @@ const addEmployee = () => {
             }
             resolve(res)
         })
-    })*/
-    return sql;
+    })
+}
+
+const addCompany = () => {
+    const rate = generateData.rate()
+    const companyName = generateData.generateCompanyName()
+    const code = generateData.generateCode(companyName)
+
+
+    let sql = `INSERT INTO Companies(name, rate, code) VALUES('${companyName}', ${rate}, '${code}')`
+    return new Promise((resolve, reject) => {
+        connection.query(sql, (error, res) => {
+            if (error) {
+                console.error("Error: ", error)
+                reject(error)
+                return
+            }
+            resolve(res)
+        })
+    })
 }
 
 module.exports = {
-    addEmployee: addEmployee
+    addEmployee: addEmployee,
+    addCompany: addCompany
 }
