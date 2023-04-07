@@ -23,7 +23,7 @@ router.post('/measure', async (req, res) => {
     if (req.body.apiType > 0) {
         info = await measure.rest(req.body.endpoint, req.body.iterations, req.body.id)
     } else {
-        /* GraphQL fetch */
+        info = await measure.graphql(req.body.endpoint, req.body.iterations, req.body.id)
     }
     res.render("index", {
         info: info

@@ -2,7 +2,6 @@ const typeDefs = `
   type Employee {
     id: Int!
     fName: String!
-    mName: String!
     lName: String!
     area: String!
     position: String!
@@ -10,7 +9,7 @@ const typeDefs = `
     gender: Int!
     philhealth: String!
     hiringdate: String!
-    pagibid: String!
+    pagibig: String!
     tin: String!
     ssid: String!
     company: Int!
