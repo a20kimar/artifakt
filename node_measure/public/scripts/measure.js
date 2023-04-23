@@ -53,7 +53,6 @@ const measureGraphQL = async (id, iterations, fId) => {
         secondField = "employees"
         query = `getEmployeesFromCompany { ${field}(id:${fId}) { ${secondField} { id fName lName area position birthday gender philhealth hiringdate pagibig tin ssid company rate status  } } } `
     }
-    console.log(query)
 
     const endpoint = "/graphql"
     const objects = []
@@ -68,7 +67,6 @@ const measureGraphQL = async (id, iterations, fId) => {
         }).then(response => {
             const endTime = performance.now();
             const responseTime = endTime - startTime;
-            console.log(response.data.data[field])
             objects.push({ time: responseTime.toFixed(2) + " ms", endpoints: endpoint + "/" + id, items: response.data.data[field].length })
         })
             .catch(error => {
