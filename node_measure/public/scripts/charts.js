@@ -1,7 +1,7 @@
 var previouslyFoundEndpoints = []
 
 function init() {
-    measurements = dummyData
+    //measurements = dummyData
     measurements = removeNoise(measurements)
     createBarCharts()
     for (let i = 0; i < measurements.length / 2; i++) {
@@ -64,8 +64,8 @@ function createLineCharts(lineChartID, measurements) {
             data: times[i]
         })
     }
-    let titles = ["Employees by ID", "All employees", "All companies", "Companies by ID", "Employees in company by ID"]
-    let title = titles[endpoint]
+    let titles = ["Employees by ID", "All employees", "Companies by ID", "All companies", "Employees in company by ID"]
+    let title = titles[endpoint - 1]
     const chartConfig = {
 
         type: 'line',
@@ -81,15 +81,42 @@ function createLineCharts(lineChartID, measurements) {
                     font: {
                         size: 24
                     }
+                },
+                legend: {
+                    labels: {
+                        font: {
+                            size: 20
+                        }
+                    }
+                }
+            },
+            elements: {
+                point: {
+                    radius: 0
                 }
             },
             scales: {
                 y: {
                     title: {
                         display: true,
-                        text: "Time (milliseconds)"
+                        text: "Time (milliseconds)",
+                        font: {
+                            size: 20
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 20
+                        }
                     },
                     beginAtZero: true
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            size: 20
+                        }
+                    }
                 }
             }
         }
@@ -101,7 +128,7 @@ function createLineCharts(lineChartID, measurements) {
     new Chart(canvas, chartConfig);
 }
 function createBarCharts() {
-    let labels = ["Employees by ID", "All employees", "All companies", "Companies by ID", "Employees in company by ID"]
+    let labels = ["Employees by ID", "All employees", "Companies by ID", "All companies", "Employees in company by ID"]
     const colors = ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)']
     let datasets = []
     for (let i = 0; i < measurements.length; i++) {
@@ -136,14 +163,46 @@ function createBarCharts() {
             datasets: datasets
         },
         options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: "",
+                    font: {
+                        size: 24
+                    }
+                },
+                legend: {
+                    labels: {
+                        font: {
+                            size: 20
+                        }
+                    }
+                }
+            },
             scales: {
                 y: {
                     title: {
                         display: true,
-                        text: "Time (milliseconds)"
+                        text: "Time (milliseconds)",
+                        font: {
+                            size: 20
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 20
+                        }
                     },
                     beginAtZero: true
+                },
+                x: {
+                    ticks: {
+                        font: {
+                            size: 20
+                        }
+                    }
                 }
+
             }
         }
     };

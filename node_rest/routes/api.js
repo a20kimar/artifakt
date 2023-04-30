@@ -13,12 +13,12 @@ router.get('/2', async (req, res) => {
     let employees = await dboperations.getEmployees()
     res.json(employees)
 })
-router.get('/3', async (req, res) => {
-    let companies = await dboperations.getCompanies()
+router.get('/3/:id', async (req, res) => {
+    let companies = await dboperations.getCompany(req.params.id)
     res.json(companies)
 })
-router.get('/4/:id', async (req, res) => {
-    let companies = await dboperations.getCompany(req.params.id)
+router.get('/4', async (req, res) => {
+    let companies = await dboperations.getCompanies()
     res.json(companies)
 })
 router.get('/5/:id', async (req, res) => {

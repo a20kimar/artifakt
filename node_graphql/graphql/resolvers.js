@@ -2,7 +2,6 @@ const dboperation = require('../dboperations')
 
 
 const resolvers = {
-
     Query: {
         employee: (parent, { id }) => dboperation.getEmployee(id),
         employees: () => dboperation.getEmployees(),

@@ -20,14 +20,57 @@ router.get('/rest', async (req, res) => {
 })
 
 router.post('/measure', async (req, res) => {
-    let info = [];
-    if (req.body.apiType > 0) {
-        info = await measure.rest(req.body.endpoint, req.body.iterations, req.body.id)
+    /* Info is needed to display the table */
+    let info = []
+    /* Form data */
+    endpoint = req.body.endpoint
+    iterations = req.body.iterations
+    apiType = req.body.apiType
+
+    /* Endpoint 6 = measure all endpoints */
+    if (endpoint == 6) {
+        /* Reset the dataset for each measurement */
+        /* This is done because most of the time you want the dataset to reset when doing a measurement on all endpoints */
+        dataset = []
+        /* Apitype 2 = measure both APIs */
+        if (apiType == 1 || apiType == 2) {
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < iterations; j++) {
+                    let results = await measure.rest(i + 1, 1, req.body.id)
+                    info.push(results[0])
+                }
+                dataset.push(info)
+                info = []
+            }
+
+        }
+
+        if (apiType == 0 || apiType == 2) {
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < iterations; j++) {
+                    let results = await measure.graphql(i + 1, 1, req.body.id)
+                    info.push(results[0])
+                }
+                dataset.push(info)
+                info = []
+            }
+        }
+
     } else {
-        info = await measure.graphql(req.body.endpoint, req.body.iterations, req.body.id)
+        if (apiType == 1 || apiType == 2) {
+            info = await measure.rest(endpoint, iterations, req.body.id)
+            dataset.push(info)
+            info = []
+        }
+        if (apiType == 0 || apiType == 2) {
+            info = await measure.graphql(endpoint, iterations, req.body.id)
+            dataset.push(info)
+            info = []
+        }
     }
-    data = data.concat(info)
-    dataset.push(info)
+
+
+
     res.render("index", {
         info: info
     });

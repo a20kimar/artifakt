@@ -78,7 +78,6 @@ const getCompanies = () => {
                 reject(error)
                 return
             }
-            console.log(res)
             resolve(res)
         })
     })

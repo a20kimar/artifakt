@@ -10,4 +10,4 @@ app.use(express.json({ limit: '1mb' }))
 app.use('/', indexRouter)
 app.use('/rest', apiRouter)
 
-app.listen(5000)
+app.listen(6000)
