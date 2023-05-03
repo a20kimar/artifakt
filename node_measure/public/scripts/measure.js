@@ -15,8 +15,11 @@ const measureRest = async (id, iterations, fId) => {
         await axios("http://192.168.1.108:6000" + endpoint)
             .then(response => {
                 const endTime = performance.now();
+                /* responseTime is in milliseconds */
                 const responseTime = endTime - startTime;
-                objects.push({ time: responseTime.toFixed(2) + " ms", endpoints: endpoint, items: response.data.length })
+                /* Size is in KiloByte */
+                const size = (Buffer.byteLength(JSON.stringify(response.data)) / 1024).toFixed(2)
+                objects.push({ time: responseTime.toFixed(2) + " ms", endpoints: endpoint, items: response.data.length, size: size })
             })
             .catch(error => {
                 console.error(error);
@@ -28,32 +31,45 @@ const measureRest = async (id, iterations, fId) => {
 }
 
 
-const measureGraphQL = async (id, iterations, fId) => {
+const measureGraphQL = async (id, iterations, fId, overfetching) => {
     let query
     let field
     let secondField
     if (id == '1') {
         field = "employee"
         query = `getEmployee { ${field}(id:${fId}) { id fName lName area position birthday gender philhealth hiringdate pagibig tin ssid company rate status } } `
+        if (overfetching) {
+            query = `getEmployee { ${field}(id:${fId}) { id fName lName area position company rate status } } `
+        }
     }
     if (id == '2') {
         field = "employees"
-        //query = `getEmployee { ${field} { id fName lName area position company rate status } } `
         query = `getEmployees { ${field} { id fName lName area position birthday gender philhealth hiringdate pagibig tin ssid company rate status } } `
+        if (overfetching) {
+            query = `getEmployee { ${field} { id fName lName area position company rate status } } `
+        }
     }
     if (id == '3') {
         field = "company"
         query = `getCompany { ${field}(id:${fId}) { id name rate code } } `
+        if (overfetching) {
+            query = `getCompany { ${field}(id:${fId}) { id name } } `
+        }
     }
     if (id == '4') {
         field = "companies"
         query = `getCompanies { ${field} { id name rate code } } `
+        if (overfetching) {
+            query = `getCompanies { ${field} { id name } } `
+        }
     }
     if (id == '5') {
         field = "company"
         secondField = "employees"
-        //query = `getEmployeesFromCompany { ${field}(id:${fId}) { ${secondField} { id fName lName area position company rate status } } } `
         query = `getEmployeesFromCompany { ${field}(id:${fId}) { ${secondField} { id fName lName area position birthday gender philhealth hiringdate pagibig tin ssid company rate status  } } } `
+        if (overfetching) {
+            query = `getEmployeesFromCompany { ${field}(id:${fId}) { ${secondField} { id fName lName area position company rate status } } } `
+        }
     }
 
     const endpoint = "/graphql"
@@ -68,14 +84,17 @@ const measureGraphQL = async (id, iterations, fId) => {
             }
         }).then(response => {
             const endTime = performance.now();
+            /* responseTime is in milliseconds */
             const responseTime = endTime - startTime;
+            /* Size is in KiloByte */
+            const size = (Buffer.byteLength(JSON.stringify(response.data.data)) / 1024).toFixed(2)
             let items;
             if (id == 1 || id == 3 || id == 5) {
                 items = [response.data.data[field]].length
             } else {
                 items = response.data.data[field].length
             }
-            objects.push({ time: responseTime.toFixed(2) + " ms", endpoints: endpoint + "/" + id, items: items })
+            objects.push({ time: responseTime.toFixed(2) + " ms", endpoints: endpoint + "/" + id, items: items, size: size })
         })
             .catch(error => {
                 console.error(error);

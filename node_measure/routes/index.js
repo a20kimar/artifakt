@@ -26,6 +26,8 @@ router.post('/measure', async (req, res) => {
     endpoint = req.body.endpoint
     iterations = req.body.iterations
     apiType = req.body.apiType
+    overfetching = req.body.overfetching ? true : false
+    underfetching = req.body.underfetching ? true : false
 
     /* Endpoint 6 = measure all endpoints */
     if (endpoint == 6) {
@@ -36,7 +38,7 @@ router.post('/measure', async (req, res) => {
         if (apiType == 1 || apiType == 2) {
             for (let i = 0; i < 5; i++) {
                 for (let j = 0; j < iterations; j++) {
-                    let results = await measure.rest(i + 1, 1, req.body.id)
+                    let results = await measure.rest(i + 1, 1, req.body.id, underfetching)
                     info.push(results[0])
                 }
                 dataset.push(info)
@@ -48,7 +50,7 @@ router.post('/measure', async (req, res) => {
         if (apiType == 0 || apiType == 2) {
             for (let i = 0; i < 5; i++) {
                 for (let j = 0; j < iterations; j++) {
-                    let results = await measure.graphql(i + 1, 1, req.body.id)
+                    let results = await measure.graphql(i + 1, 1, req.body.id, overfetching)
                     info.push(results[0])
                 }
                 dataset.push(info)
@@ -58,12 +60,12 @@ router.post('/measure', async (req, res) => {
 
     } else {
         if (apiType == 1 || apiType == 2) {
-            info = await measure.rest(endpoint, iterations, req.body.id)
+            info = await measure.rest(endpoint, iterations, req.body.id, underfetching)
             dataset.push(info)
             info = []
         }
         if (apiType == 0 || apiType == 2) {
-            info = await measure.graphql(endpoint, iterations, req.body.id)
+            info = await measure.graphql(endpoint, iterations, req.body.id, overfetching)
             dataset.push(info)
             info = []
         }

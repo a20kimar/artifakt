@@ -3,6 +3,7 @@ var previouslyFoundEndpoints = []
 function init() {
     //measurements = dummyData
     measurements = removeNoise(measurements)
+    console.log(measurements)
     createBarCharts()
     for (let i = 0; i < measurements.length / 2; i++) {
         createLineCharts(i, findMatchingEndpoints(measurements))
@@ -50,8 +51,8 @@ function getName(name) {
         return "REST"
     }
 }
-function createLineCharts(lineChartID, measurements) {
 
+function createLineCharts(lineChartID, measurements) {
     var times = extractAllTimeValues(measurements)
     const numArr = Array(measurements[0].length).fill(0).map((_, i) => i);
     let datasets = []
@@ -127,6 +128,7 @@ function createLineCharts(lineChartID, measurements) {
     chartContainer.appendChild(canvas);
     new Chart(canvas, chartConfig);
 }
+
 function createBarCharts() {
     let labels = ["Employees by ID", "All employees", "Companies by ID", "All companies", "Employees in company by ID"]
     const colors = ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)']
