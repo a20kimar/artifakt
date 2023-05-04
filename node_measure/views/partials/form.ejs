@@ -28,10 +28,12 @@
   <label for="underfetching">Simulate underfetching</label>
   <input type="checkbox" name="underfetching" id="underfetching">
   <br>
+  <label for="resetdata">Reset dataset</label>
+  <input type="checkbox" name="resetdata" id="resetdata" checked>
+  <br>
   <button type="submit">Submit</button>    
 </form>
 
 <form method="POST" action="/chart">
-  <input type="hidden" id="data" name="data" value="<%= JSON.stringify(info) %>" />
   <button type="submit">Show graphs</button>
 </form>

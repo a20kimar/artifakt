@@ -6,16 +6,12 @@ var data = []
 var dataset = []
 
 router.get('/', (req, res) => {
-    const info = []
     res.render("index", {
-        info: info
     });
 })
 
 router.get('/rest', async (req, res) => {
-    const info = []
     res.render("index", {
-        info: info
     });
 })
 
@@ -28,12 +24,12 @@ router.post('/measure', async (req, res) => {
     apiType = req.body.apiType
     overfetching = req.body.overfetching ? true : false
     underfetching = req.body.underfetching ? true : false
+    if (req.body.resetdata) {
+        dataset = []
+    }
 
     /* Endpoint 6 = measure all endpoints */
     if (endpoint == 6) {
-        /* Reset the dataset for each measurement */
-        /* This is done because most of the time you want the dataset to reset when doing a measurement on all endpoints */
-        dataset = []
         /* Apitype 2 = measure both APIs */
         if (apiType == 1 || apiType == 2) {
             for (let i = 0; i < 5; i++) {
@@ -74,7 +70,6 @@ router.post('/measure', async (req, res) => {
 
 
     res.render("index", {
-        info: info
     });
 })
 
@@ -92,6 +87,9 @@ router.get('/download', (req, res) => {
     res.json(data)
 })
 
+router.get('/add', (req, res) => {
+    res.render('add')
+})
 
 router.post('/', (req, res) => {
 

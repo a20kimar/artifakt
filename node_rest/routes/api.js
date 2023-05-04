@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const dboperations = require('../dboperations')
-const addData = require('../scripts/addemployees')
+const addData = require('../scripts/addData')
 
 
 
@@ -28,12 +28,15 @@ router.get('/5/:id', async (req, res) => {
 router.get('/', async (req, res) => {
     res.json("/1/id = Get employee with id; /2/ = Get all employees; /3/ = Get all companies; /4/id = Get company with ID; /5/id = Get employees from company with ID;")
 })
-router.get('/add', async (req, res) => {
-    for (let i = 0; i < 250; i++) {
-        const addEmployee = await addData.addEmployee();
-        //const addCompany = await addData.addCompany();
+router.post('/add', async (req, res) => {
+    const companies = req.body.companies ? req.body.companies : 0
+    const employees = req.body.employees ? req.body.employees : 0
+    for (let i = 0; i < employees; i++) {
+        await addData.addEmployee()
     }
-
+    for (let i = 0; i < companies; i++) {
+        await addData.addCompany()
+    }
     res.json("Done adding")
 })
 module.exports = router

@@ -135,6 +135,7 @@ function createBarCharts() {
     let datasets = []
     for (let i = 0; i < measurements.length; i++) {
         let endpoint = measurements[i][0].endpoints.split("/")[1]
+        let size = measurements[i][0].size
         let n = 0
         if (endpoint == "graphql") {
             n = 1
@@ -148,7 +149,7 @@ function createBarCharts() {
         }
         if (!datasets[n]) {
             datasets[n] = {
-                label: getName(endpoint),
+                label: getName(endpoint) + " (" + size + " kb)",
                 data: [],
                 backgroundColor: colors[n],
                 borderColor: colors[n],

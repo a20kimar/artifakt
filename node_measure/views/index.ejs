@@ -1,21 +1,4 @@
 <div class="container-inner">
     <h2>Measure API</h2>
     <%- include('./partials/form.ejs') %> 
-    <div class="results">
-        <table>
-
-            <tr>
-                <th>Time</th>
-                <th>Endpoint</th>
-                <th>Items</th>
-            </tr>
-        <% info.forEach(cell => { %>
-            <tr>
-                <td><%= cell.time %></td>
-                <td><%= cell.endpoints %></td>
-                <td><%= cell.items %></td>
-            </tr>
-        <% }) %>
-        </table>
-    </div>
 </div>
