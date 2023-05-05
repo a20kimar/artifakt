@@ -10,66 +10,69 @@ router.get('/', (req, res) => {
     });
 })
 
-router.get('/rest', async (req, res) => {
+router.get('/rest', (req, res) => {
     res.render("index", {
     });
 })
 
 router.post('/measure', async (req, res) => {
-    /* Info is needed to display the table */
-    let info = []
+    /* results is needed to display the table */
+    let results = []
     /* Form data */
     endpoint = req.body.endpoint
-    iterations = req.body.iterations
+    iterations = parseInt(req.body.iterations)
     apiType = req.body.apiType
     overfetching = req.body.overfetching ? true : false
     underfetching = req.body.underfetching ? true : false
     if (req.body.resetdata) {
         dataset = []
     }
-
     /* Endpoint 6 = measure all endpoints */
     if (endpoint == 6) {
         /* Apitype 2 = measure both APIs */
         if (apiType == 1 || apiType == 2) {
             for (let i = 0; i < 5; i++) {
                 for (let j = 0; j < iterations; j++) {
-                    let results = await measure.rest(i + 1, 1, req.body.id, underfetching)
-                    info.push(results[0])
+                    let result = await measure.rest(i + 1, req.body.id)
+                    results.push(result)
                 }
-                dataset.push(info)
-                info = []
+                dataset.push(results)
+                results = []
             }
 
         }
-
         if (apiType == 0 || apiType == 2) {
             for (let i = 0; i < 5; i++) {
                 for (let j = 0; j < iterations; j++) {
-                    let results = await measure.graphql(i + 1, 1, req.body.id, overfetching)
-                    info.push(results[0])
+                    let result = await measure.graphql(i + 1, req.body.id, overfetching)
+                    results.push(result)
                 }
-                dataset.push(info)
-                info = []
+                dataset.push(results)
+                results = []
             }
         }
-
     } else {
         if (apiType == 1 || apiType == 2) {
-            info = await measure.rest(endpoint, iterations, req.body.id, underfetching)
-            dataset.push(info)
-            info = []
+            for (let i = 0; i < iterations; i++) {
+                let result = await measure.rest(endpoint, req.body.id)
+                results.push(result)
+            }
+            dataset.push(results)
+            results = []
         }
         if (apiType == 0 || apiType == 2) {
-            info = await measure.graphql(endpoint, iterations, req.body.id, overfetching)
-            dataset.push(info)
-            info = []
+            for (let i = 0; i < iterations; i++) {
+                let result = await measure.graphql(endpoint, req.body.id, overfetching)
+                results.push(result)
+            }
+            dataset.push(results)
+            results = []
         }
     }
 
-
-
+    console.log(dataset)
     res.render("index", {
+        data: dataset
     });
 })
 

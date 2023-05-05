@@ -1,4 +1,4 @@
-
+const dboperations = require('../dboperations')
 const firstNames = ['Alice', 'Bob', 'Charlie', 'David', 'Emma', 'Frank', 'Grace', 'Henry', 'Ivy', 'John', 'Katie', 'Leo', 'Mary', 'Nick', 'Olivia', 'Paul', 'Quinn', 'Rachel', 'Sarah', 'Tom', 'Ursula', 'Victoria', 'Wendy', 'Xander', 'Yara', 'Zach'];
 const lastNames = ['Anderson', 'Brown', 'Chen', 'Davis', 'Evans', 'Fisher', 'Garcia', 'Harris', 'Isaacs', 'Johnson', 'Kim', 'Lopez', 'Miller', 'Nguyen', 'Owens', 'Patel', 'Robinson', 'Smith', 'Taylor', 'Unger', 'Vargas', 'White', 'Xiong', 'Yang', 'Zhang'];
 const cities = ['New York', 'London', 'Tokyo', 'Paris', 'Berlin', 'Sydney', 'Moscow', 'Mumbai', 'Rio de Janeiro', 'Toronto', 'Shanghai', 'Seoul', 'Dubai', 'Singapore', 'Hong Kong', 'Barcelona', 'Rome', 'Los Angeles', 'San Francisco', 'Cape Town', 'Vancouver', 'Zurich', 'Amsterdam', 'Vienna', 'Buenos Aires', 'Bangkok', 'Istanbul', 'Stockholm', 'Oslo', 'Copenhagen', 'Helsinki', 'Dublin', 'Edinburgh', 'Brussels', 'Madrid', 'Lisbon', 'Athens', 'Prague', 'Krakow', 'Budapest', 'Warsaw', 'Dubrovnik', 'Reykjavik', 'Havana', 'Mexico City', 'Santiago', 'Bogota', 'Lima', 'Caracas', 'Kuala Lumpur', 'Phnom Penh', 'Hanoi', 'Marrakech', 'Cairo', 'Tel Aviv', 'Jerusalem', 'Beijing', 'Ho Chi Minh City', 'Manila', 'Jakarta', 'New Delhi', 'Kolkata', 'Bengaluru', 'Chennai', 'Hyderabad', 'Islamabad', 'Karachi', 'Lahore', 'Tehran', 'Baghdad', 'Riyadh', 'Jeddah', 'Abu Dhabi', 'Doha', 'Kuwait City', 'Muscat', 'Nairobi', 'Dar es Salaam', 'Cape Town', 'Johannesburg', 'Casablanca', 'Tunis', 'Algiers', 'Accra', 'Lagos', 'Nairobi', 'Dakar', 'Kinshasa', 'Luanda', 'Kigali', 'Yaounde', 'Abidjan', 'Conakry', 'Lubumbashi', 'Freetown'];
@@ -89,10 +89,10 @@ const generateSSID = () => {
     const max = 999999999999;
     return generateRandomNumber(min, max);
 }
-const generateCompany = () => {
+const generateCompany = async () => {
     const min = 1;
-    const max = 250;
-    return generateRandomNumber(min, max);
+    const max = await dboperations.getCompanies()
+    return generateRandomNumber(min, max.length);
 }
 const generateRate = () => {
     const min = 250;

@@ -4,7 +4,7 @@ const generateData = require('./generatedata')
 
 /* Script to add employees to the database */
 
-const addEmployee = () => {
+const addEmployee = async () => {
     const names = generateData.names()
     const area = generateData.area()
     const position = generateData.position()
@@ -15,7 +15,7 @@ const addEmployee = () => {
     const pagibid = generateData.pagibid()
     const tin = generateData.tin()
     const ssid = generateData.ssid()
-    const company = generateData.company()
+    const company = await generateData.company()
     const rate = generateData.rate()
     const status = generateData.status()
 

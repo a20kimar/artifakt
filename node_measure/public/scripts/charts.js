@@ -2,11 +2,13 @@ var previouslyFoundEndpoints = []
 
 function init() {
     //measurements = dummyData
-    measurements = removeNoise(measurements)
-    console.log(measurements)
-    createBarCharts()
-    for (let i = 0; i < measurements.length / 2; i++) {
-        createLineCharts(i, findMatchingEndpoints(measurements))
+    if (typeof measurements != 'undefined') {
+        measurements = removeNoise(measurements)
+        console.log(measurements)
+        createBarCharts()
+        for (let i = 0; i < measurements.length / 2; i++) {
+            createLineCharts(i, findMatchingEndpoints(measurements))
+        }
     }
 }
 function removeNoise(measurements) {
@@ -14,8 +16,8 @@ function removeNoise(measurements) {
     for (let i = 0; i < measurements.length; i++) {
         let avg = calculateAverage(measurements[i])
         for (let j = 0; j < measurements[i].length; j++) {
-            if (parseFloat(measurements[i][j].time.split(" ")[0]) > avg + 10) {
-                measurements[i][j].time = avg + " ms"
+            if (measurements[i][j].time > avg + 10) {
+                measurements[i][j].time = avg
             }
         }
     }
@@ -65,7 +67,7 @@ function createLineCharts(lineChartID, measurements) {
             data: times[i]
         })
     }
-    let titles = ["Employees by ID", "All employees", "Companies by ID", "All companies", "Employees in company by ID"]
+    let titles = ["All employees", "All companies", "All companies from employees", "Underfetching", "Underfetching high volume"]
     let title = titles[endpoint - 1]
     const chartConfig = {
 
@@ -217,8 +219,7 @@ function createBarCharts() {
 function calculateAverage(measurements) {
     // Calculate the average of the measurements array
     const sum = measurements.reduce((acc, curr) => {
-        const timeValue = parseFloat(curr.time.replace(" ms", ""));
-        return acc + timeValue;
+        return acc + curr.time;
     }, 0);
     const average = sum / measurements.length;
     return average;
@@ -228,8 +229,7 @@ function calculateStdDev(measurements) {
     // Calculate the standard deviation of the measurements array
     const average = calculateAverage(measurements);
     const squaredDiffs = measurements.reduce((acc, curr) => {
-        const timeValue = parseFloat(curr.time.replace(" ms", ""));
-        const diff = timeValue - average;
+        const diff = curr.time - average;
         return acc + diff ** 2;
     }, 0);
     const variance = squaredDiffs / measurements.length;
@@ -250,8 +250,7 @@ function extractAllTimeValues(arrayOfArrays) {
 function extractTimeValues(array) {
     const timeValues = [];
     for (let i = 0; i < array.length; i++) {
-        const timeString = array[i].time;
-        const timeValue = parseFloat(timeString.split(' ')[0]);
+        const timeValue = array[i].time;
         timeValues.push(timeValue);
     }
     return timeValues;
