@@ -1,3 +1,4 @@
+@import 'fonts.css';
 
 :root {
     font-family: 'Rubik';
@@ -15,14 +16,14 @@ body {
 }
 
 .container {
-    width:70%;
+    padding:1rem;
     margin:auto;
     margin-bottom:3rem;
-    margin-top:3rem;
     border-radius: 5px;
-    justify-content: center;
-    gap: 5rem;
+    flex-direction: column;
     display:flex;
+    align-items: center;
+    text-align: center;
 }
 
 .chart-container {
@@ -31,19 +32,37 @@ body {
     flex-direction: column;
     gap:10em;
 }
-.container-inner {
-    padding: 2rem;
-}
 
-
-.container-inner h2 {
-    font-size: 2rem;
+.container h2 {
+    font-size: 3em;
     font-weight: 500;
     margin:0 0 1rem 0;
     padding:0;
 }
 .container-inner table {
     border: 1px solid black;
+}
+form {
+    flex-direction: column;
+    display:flex;
+    gap:1rem;
+}
+.form-item-checkbox {
+    display:flex;
+    align-items: center;
+}
+.form-item-checkbox input {
+    width: 20%;
+}
+input, select {
+    width:100%;
+    text-align: center;
+    height:2rem;
+    font-size: 1.2em;
+}
+button {
+    font-size: 1.2em;
+    width:100%;
 }
 #myChart {
     width:100%;

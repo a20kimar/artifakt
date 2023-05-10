@@ -4,6 +4,7 @@ const measure = require('../public/scripts/measure')
 
 var data = []
 var dataset = []
+var datasetItems = []
 
 router.get('/', (req, res) => {
     res.render("index", {
@@ -16,8 +17,8 @@ router.get('/rest', (req, res) => {
 })
 
 router.post('/measure', async (req, res) => {
-    /* results is needed to display the table */
     let results = []
+    let items = []
     /* Form data */
     endpoint = req.body.endpoint
     iterations = parseInt(req.body.iterations)
@@ -26,6 +27,7 @@ router.post('/measure', async (req, res) => {
     underfetching = req.body.underfetching ? true : false
     if (req.body.resetdata) {
         dataset = []
+        datasetItems = []
     }
     /* Endpoint 6 = measure all endpoints */
     if (endpoint == 6) {
@@ -51,7 +53,7 @@ router.post('/measure', async (req, res) => {
                 results = []
             }
         }
-    } else {
+    } else if (endpoint != 7) {
         if (apiType == 1 || apiType == 2) {
             for (let i = 0; i < iterations; i++) {
                 let result = await measure.rest(endpoint, req.body.id)
@@ -69,8 +71,13 @@ router.post('/measure', async (req, res) => {
             results = []
         }
     }
-
+    if (endpoint == 7) {
+        let result = await measure.memTest(iterations)
+        dataset.push(result)
+        results = []
+    }
     console.log(dataset)
+
     res.render("index", {
         data: dataset
     });

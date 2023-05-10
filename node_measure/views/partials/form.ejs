@@ -1,39 +1,39 @@
 <form method="POST" action="/measure">
-    <label for="endpoint">Endpoint:</label>
+  <div class="form-item">
 <select name="endpoint" id="endpoint">
     <option value="1">1 - All employees  </option>
     <option value="2">2 - All companies</option>
     <option value="3">3 - Employees from certain company </option>
-    <option value="4">4 - </option>
-    <option value="5">5 - </option>
+    <option value="4">4 - Underfetching</option>
+    <option value="5">5 - Underfetching high volume</option>
     <option value="6">6 - All endpoints</option>
+    <option value="7">7 - Memory test</option>
   </select>
-  <br>
-  <label for="id">ID:</label>
-  <input type="text" name="id" id="id">
-  <br>
-<label for="apiType">API Type:</label>
-  <select name="apiType" id="apiType">
-    <option value="0">GraphQL</option>
-    <option value="1">REST</option>
-    <option value="2">GraphQL & REST</option>
-  </select>
-  <br>
-  <label for="iterations">Iterations</label>
-  <input type="number" name="iterations" id="iterations">
-  <br>
-  <label for="overfetching">Simulate overfetching</label>
-  <input type="checkbox" name="overfetching" id="overfetching">
-  <br>
-  <label for="underfetching">Simulate underfetching</label>
-  <input type="checkbox" name="underfetching" id="underfetching">
-  <br>
-  <label for="resetdata">Reset dataset</label>
-  <input type="checkbox" name="resetdata" id="resetdata" checked>
-  <br>
-  <button type="submit">Submit</button>    
-</form>
-
-<form method="POST" action="/chart">
-  <button type="submit">Show graphs</button>
+  </div>
+  <div class="form-item">
+    <input type="text" placeholder="Search..." name="id" id="id">
+  </div>
+  <div class="form-item">
+    <select name="apiType" id="apiType">
+      <option value="0">GraphQL</option>
+      <option value="1">REST</option>
+      <option value="2">GraphQL & REST</option>
+    </select>
+  </div>
+  <div class="form-item">
+    <input type="number" placeholder="Iterations" name="iterations" id="iterations">
+  </div>
+  <div class="form-item form-item-checkbox">
+    <label for="overfetching">Simulate overfetching</label>
+    <input type="checkbox" name="overfetching" id="overfetching">
+    <label for="resetdata">Reset dataset</label>
+    <input type="checkbox" name="resetdata" id="resetdata" checked>
+  </div>
+  <div class="form-item">
+    <button type="submit">Submit</button>    
+  </div>
+  <div class="form-item">
+    <button disabled onclick="showGraphs()">Show Graphs</button>
+    <button disabled onclick="showData()">Show Data</button>
+  </div>
 </form>

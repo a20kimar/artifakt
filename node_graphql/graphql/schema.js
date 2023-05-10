@@ -26,11 +26,13 @@ const typeDefs = `
     employees: [Employee]
   }
 
+  scalar StringOrInt
+
   type Query {
     employees: [Employee!]!
-    employee(id: Int!): Employee
+    employee(id: StringOrInt!): [Employee]
     companies: [Company!]!
-    company(id: Int!): Company
+    company(id: StringOrInt!): [Company]
   }
 `
 

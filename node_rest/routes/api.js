@@ -3,7 +3,7 @@ const router = express.Router()
 const dboperations = require('../dboperations')
 const addData = require('../scripts/addData')
 
-
+var memTest = []
 
 router.get('/1', async (req, res) => {
     let employees = await dboperations.getEmployees()
@@ -27,6 +27,20 @@ router.get('/4/:id', async (req, res) => {
 router.get('/5/:id', async (req, res) => {
     let employees = await dboperations.getEmployee(req.params.id)
     res.json(employees)
+})
+router.get('/7/', async (req, res) => {
+    let employees = await dboperations.getEmployees()
+    memTest.push(employees)
+    let size, items
+    if (memTest.length % 10 == 0) {
+        size = (Buffer.byteLength(JSON.stringify(memTest)) / 1024).toFixed(2)
+        items = memTest.length
+    }
+    res.json({ size: size, items: items })
+})
+router.get('/8/', (req, res) => {
+    memTest = []
+    res.json("Memory reset")
 })
 router.get('/', async (req, res) => {
     res.json("")

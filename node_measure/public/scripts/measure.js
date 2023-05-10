@@ -111,7 +111,7 @@ const measureGraphQL = async (id, fId, overfetching) => {
     }
 
     const endpoint = "/graphql"
-    const objects = []
+    let object
     const startTime = performance.now();
     await axios({
         url: "http://192.168.1.108:5000" + endpoint,
@@ -131,17 +131,54 @@ const measureGraphQL = async (id, fId, overfetching) => {
         } else {
             items = response.data.data[field].length
         }
-        objects.push({ time: parseFloat(responseTime.toFixed(2)), endpoints: endpoint + "/" + id, items: items, size: parseFloat(size) })
+        results = response.data.data[field]
+        object = { time: parseFloat(responseTime.toFixed(2)), endpoints: endpoint + "/" + id, items: items, size: parseFloat(size) }
     })
         .catch(error => {
             console.error(error.message);
         })
 
     /* Return an array of objects containing property time, endpoints & items */
-    return objects[0]
+    return object
+}
+
+const memTest = async (iterations) => {
+    resetMemory()
+    let numOfReplies = 0
+    let objects = []
+    for (let i = 0; i < iterations; i++) {
+        const startTime = performance.now();
+        await axios("http://192.168.1.108:6000/rest/7")
+            .then(response => {
+                const endTime = performance.now();
+                /* responseTime is in milliseconds */
+                const responseTime = endTime - startTime;
+                numOfReplies++
+                console.log(numOfReplies)
+                if (typeof response.data.size != 'undefined') {
+                    objects.push({ time: responseTime, endpoints: "/rest/7", items: response.data.items, size: response.data.size })
+                }
+            })
+            .catch(error => {
+                console.error(error.message);
+                return objects
+            })
+    }
+    return objects
+}
+
+const resetMemory = async () => {
+    await axios("http://192.168.1.108:6000/rest/8")
+        .then(response => {
+            console.log(response.data)
+        })
+        .catch(error => {
+            console.error(error.message);
+        })
 }
 
 module.exports = {
     rest: measureRest,
-    graphql: measureGraphQL
+    graphql: measureGraphQL,
+    memTest: memTest
 } 
