@@ -31,9 +31,11 @@ router.post('/measure', async (req, res) => {
     }
     /* Endpoint 6 = measure all endpoints */
     if (endpoint == 6) {
+        console.log("Starting to measure all endpoints")
         /* Apitype 2 = measure both APIs */
         if (apiType == 1 || apiType == 2) {
             for (let i = 0; i < 5; i++) {
+                console.log("Measuring rest.. endpoint " + (i + 1))
                 for (let j = 0; j < iterations; j++) {
                     let result = await measure.rest(i + 1, req.body.id)
                     results.push(result)
@@ -45,6 +47,7 @@ router.post('/measure', async (req, res) => {
         }
         if (apiType == 0 || apiType == 2) {
             for (let i = 0; i < 5; i++) {
+                console.log("Measuring graphql.. endpoint " + (i + 1))
                 for (let j = 0; j < iterations; j++) {
                     let result = await measure.graphql(i + 1, req.body.id, overfetching)
                     results.push(result)
@@ -55,6 +58,7 @@ router.post('/measure', async (req, res) => {
         }
     } else if (endpoint != 7) {
         if (apiType == 1 || apiType == 2) {
+            console.log("Measuring rest..")
             for (let i = 0; i < iterations; i++) {
                 let result = await measure.rest(endpoint, req.body.id)
                 results.push(result)
@@ -63,6 +67,7 @@ router.post('/measure', async (req, res) => {
             results = []
         }
         if (apiType == 0 || apiType == 2) {
+            console.log("Measuring graphql..")
             for (let i = 0; i < iterations; i++) {
                 let result = await measure.graphql(endpoint, req.body.id, overfetching)
                 results.push(result)

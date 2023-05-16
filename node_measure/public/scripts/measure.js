@@ -1,4 +1,5 @@
 const axios = require('axios')
+const url = "http://192.168.1.167"
 
 const measureRest = async (id, fId) => {
     /* Id is the endpoint id, fId is the database entry id 
@@ -9,12 +10,14 @@ const measureRest = async (id, fId) => {
         endpoint += "/" + fId;
     }*/
     const objects = []
+    let overfetch = false
     let results = []
     let endpoint = id + "/" + fId
     let iterations = 1;
     if (id == 4 || id == 5) {
+        overfetch = true
         const startTime = performance.now();
-        await axios("http://192.168.1.108:6000/rest/" + endpoint)
+        await axios(url + ":6000/rest/" + endpoint)
             .then(response => {
                 const endTime = performance.now();
                 /* responseTime is in milliseconds */
@@ -28,15 +31,15 @@ const measureRest = async (id, fId) => {
                 console.error(error);
             })
         iterations = results.length
-        id = id == 4 ? 3 : 4
+        id = id - 1
     }
     for (let i = 0; i < iterations; i++) {
-        endpoint = id
+        endpoint = results.length > 0 && id == 3 ? 4 : id
         if (id > 2) {
             endpoint += results.length > 0 ? "/" + results[i].id : "/" + fId
         }
         const startTime = performance.now();
-        await axios("http://192.168.1.108:6000/rest/" + endpoint)
+        await axios(url + ":6000/rest/" + endpoint)
             .then(response => {
                 const endTime = performance.now();
                 /* responseTime is in milliseconds */
@@ -50,6 +53,7 @@ const measureRest = async (id, fId) => {
                 console.error(error);
             })
     }
+    id = overfetch ? id + 1 : id
 
     endpoint = "/rest/" + id
     const sum = { time: 0, endpoints: endpoint, items: 0, size: 0 }
@@ -114,7 +118,7 @@ const measureGraphQL = async (id, fId, overfetching) => {
     let object
     const startTime = performance.now();
     await axios({
-        url: "http://192.168.1.108:5000" + endpoint,
+        url: url + ":5000" + endpoint,
         method: 'post',
         data: {
             "query": `query ${query}`
@@ -148,7 +152,7 @@ const memTest = async (iterations) => {
     let objects = []
     for (let i = 0; i < iterations; i++) {
         const startTime = performance.now();
-        await axios("http://192.168.1.108:6000/rest/7")
+        await axios(url + ":6000/rest/7")
             .then(response => {
                 const endTime = performance.now();
                 /* responseTime is in milliseconds */
@@ -168,7 +172,7 @@ const memTest = async (iterations) => {
 }
 
 const resetMemory = async () => {
-    await axios("http://192.168.1.108:6000/rest/8")
+    await axios(url + ":6000/rest/8")
         .then(response => {
             console.log(response.data)
         })

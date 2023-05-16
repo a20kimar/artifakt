@@ -4,6 +4,7 @@
   "description": "Rest API Artifact",
   "main": "index.js",
   "scripts": {
+    "run": "node index.js",
     "test": "nodemon"
   },
   "repository": {

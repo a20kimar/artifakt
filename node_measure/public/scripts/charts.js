@@ -2,12 +2,70 @@
 var previouslyFoundEndpoints = []
 
 function init() {
-    if (typeof info != 'undefined') {
+    if (typeof raspberrypi != 'undefined' && typeof ubuntu != 'undefined') {
+        console.log(raspberrypi)
+        for (let i = 0; i < (raspberrypi.length / 2); i++) {
+            console.log("endpoints", raspberrypi[i][0].endpoints)
+            console.log("length", (raspberrypi.length / 2) + i)
+            let title = "Raspberry Pi "
+            let data = [
+                raspberrypi[i].map((obj) => parseFloat(obj.time.toFixed(2))),
+                raspberrypi[(raspberrypi.length / 2) + i].map((obj) => parseFloat(obj.time.toFixed(2)))
+            ]
+            let labels = []
+            labels.push(getName(raspberrypi[i][0].endpoints.split("/")[1]))
+            labels.push(getName(raspberrypi[(raspberrypi.length / 2) + i][0].endpoints.split("/")[1]))
+            let endpoint = getEndpoint(parseInt(raspberrypi[i][0].endpoints.slice(-1)))
+            createSingleLineChart({ title: title + endpoint, labels: labels, data: data })
+        }
+        for (let i = 0; i < (ubuntu.length / 2); i++) {
+            let title = "Ubuntu "
+            let data = [
+                ubuntu[i].map((obj) => parseFloat(obj.time.toFixed(2))),
+                ubuntu[(ubuntu.length / 2) + i].map((obj) => parseFloat(obj.time.toFixed(2)))
+            ]
+            let labels = []
+            labels.push(getName(ubuntu[i][0].endpoints.split("/")[1]))
+            labels.push(getName(ubuntu[(ubuntu.length / 2) + i][0].endpoints.split("/")[1]))
+            let endpoint = getEndpoint(parseInt(ubuntu[i][0].endpoints.slice(-1)))
+            createSingleLineChart({ title: title + endpoint, labels: labels, data: data })
+        }
+        for (let i = 0; i < (ubuntu.length / 2); i++) {
+            let title = "Both "
+            let data = [
+                ubuntu[i].map((obj) => parseFloat(obj.time.toFixed(2))),
+                ubuntu[(ubuntu.length / 2) + i].map((obj) => parseFloat(obj.time.toFixed(2))),
+                raspberrypi[i].map((obj) => parseFloat(obj.time.toFixed(2))),
+                raspberrypi[(raspberrypi.length / 2) + i].map((obj) => parseFloat(obj.time.toFixed(2)))
+            ]
+            let labels = []
+            labels.push("Ubuntu " + getName(ubuntu[i][0].endpoints.split("/")[1]))
+            labels.push("Ubuntu " + getName(ubuntu[(ubuntu.length / 2) + i][0].endpoints.split("/")[1]))
+            labels.push("Raspberry Pi " + getName(raspberrypi[i][0].endpoints.split("/")[1]))
+            labels.push("Raspberry Pi " + getName(raspberrypi[(raspberrypi.length / 2) + i][0].endpoints.split("/")[1]))
+            let endpoint = getEndpoint(parseInt(ubuntu[i][0].endpoints.slice(-1)))
+            createSingleLineChart({ title: title + endpoint, labels: labels, data: data })
+        }
     }
+    if (typeof raspberrypiMemorytest != 'undefined' && typeof ubuntuMemorytest != 'undefined') {
+        for (let i = 0; i < raspberrypiMemorytest.length; i++) {
+            let title = "Raspberry Pi "
+            let data = [
+                raspberrypiMemorytest[i].map((obj) => parseFloat(obj.time.toFixed(2))),
+                ubuntuMemorytest[i].map((obj) => parseFloat(obj.time.toFixed(2))),
+            ]
+            let labels = []
+            labels.push("Raspberry Pi")
+            labels.push("Ubuntu")
+            let endpoint = getEndpoint(parseInt(raspberrypiMemorytest[i][0].endpoints.slice(-1)))
+            createSingleLineChart({ title: title + endpoint, labels: labels, data: data })
+        }
+    }
+    console.log("----New data below----")
     //measurements = dummyData
     if (typeof measurements != 'undefined') {
-        let endpoint = measurements[0][0].endpoints.slice(-1)
         console.log(measurements)
+        let endpoint = measurements[0][0].endpoints.slice(-1)
         if (endpoint == 7) {
             let labels = ["Time"]
             let data = [measurements[0].map((obj) => parseFloat(obj.time.toFixed(2)))]
@@ -71,6 +129,25 @@ function init() {
         }
     }
 
+    function getEndpoint(num) {
+
+        switch (num) {
+            case 1:
+                return "All employees"
+            case 2:
+                return "All companies"
+            case 3:
+                return "All companies from employees"
+            case 4:
+                return "Underfetching"
+            case 5:
+                return "Underfetching high volume"
+            case 6:
+                return "All endpoints"
+            case 7:
+                return "Memory test"
+        }
+    }
     function createSingleLineChart(chartObj) {
         const numArr = Array(chartObj.data[0].length).fill(0).map((_, i) => i);
         let title = chartObj.title
@@ -107,7 +184,7 @@ function init() {
                 },
                 elements: {
                     point: {
-                        radius: 10
+                        radius: 0
                     }
                 },
                 scales: {
