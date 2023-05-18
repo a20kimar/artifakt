@@ -32,7 +32,7 @@ router.get('/7/', async (req, res) => {
     let employees = await dboperations.getEmployees()
     memTest.push(employees)
     let size, items
-    if (memTest.length % 10 == 0) {
+    if (memTest.length % 10000 == 0) {
         size = (Buffer.byteLength(JSON.stringify(memTest)) / 1024).toFixed(2)
         items = memTest.length
     }

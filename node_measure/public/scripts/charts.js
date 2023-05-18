@@ -3,10 +3,10 @@ var previouslyFoundEndpoints = []
 
 function init() {
     if (typeof raspberrypi != 'undefined' && typeof ubuntu != 'undefined') {
+        raspberrypi = removeNoise(raspberrypi)
+        ubuntu = removeNoise(ubuntu)
         console.log(raspberrypi)
         for (let i = 0; i < (raspberrypi.length / 2); i++) {
-            console.log("endpoints", raspberrypi[i][0].endpoints)
-            console.log("length", (raspberrypi.length / 2) + i)
             let title = "Raspberry Pi "
             let data = [
                 raspberrypi[i].map((obj) => parseFloat(obj.time.toFixed(2))),
@@ -16,6 +16,8 @@ function init() {
             labels.push(getName(raspberrypi[i][0].endpoints.split("/")[1]))
             labels.push(getName(raspberrypi[(raspberrypi.length / 2) + i][0].endpoints.split("/")[1]))
             let endpoint = getEndpoint(parseInt(raspberrypi[i][0].endpoints.slice(-1)))
+            console.log(labels)
+            createSingleBarChart({ title: title + endpoint, labels: labels, data: data })
             createSingleLineChart({ title: title + endpoint, labels: labels, data: data })
         }
         for (let i = 0; i < (ubuntu.length / 2); i++) {
@@ -28,6 +30,7 @@ function init() {
             labels.push(getName(ubuntu[i][0].endpoints.split("/")[1]))
             labels.push(getName(ubuntu[(ubuntu.length / 2) + i][0].endpoints.split("/")[1]))
             let endpoint = getEndpoint(parseInt(ubuntu[i][0].endpoints.slice(-1)))
+            createSingleBarChart({ title: title + endpoint, labels: labels, data: data })
             createSingleLineChart({ title: title + endpoint, labels: labels, data: data })
         }
         for (let i = 0; i < (ubuntu.length / 2); i++) {
@@ -44,6 +47,7 @@ function init() {
             labels.push("Raspberry Pi " + getName(raspberrypi[i][0].endpoints.split("/")[1]))
             labels.push("Raspberry Pi " + getName(raspberrypi[(raspberrypi.length / 2) + i][0].endpoints.split("/")[1]))
             let endpoint = getEndpoint(parseInt(ubuntu[i][0].endpoints.slice(-1)))
+            createSingleBarChart({ title: title + endpoint, labels: labels, data: data })
             createSingleLineChart({ title: title + endpoint, labels: labels, data: data })
         }
     }
@@ -58,6 +62,7 @@ function init() {
             labels.push("Raspberry Pi")
             labels.push("Ubuntu")
             let endpoint = getEndpoint(parseInt(raspberrypiMemorytest[i][0].endpoints.slice(-1)))
+            createSingleBarChart({ title: title + endpoint, labels: labels, data: data })
             createSingleLineChart({ title: title + endpoint, labels: labels, data: data })
         }
     }
@@ -89,9 +94,10 @@ function init() {
     }
     function removeNoise(measurements) {
         for (let i = 0; i < measurements.length; i++) {
-            let avg = calculateAverage(measurements[i])
+            let avg = calculateAverage(measurements[i].map((obj) => parseFloat(obj.time.toFixed(2))))
             for (let j = 0; j < measurements[i].length; j++) {
-                if (measurements[i][j].time > avg + 10) {
+                console.log("time", measurements[i][j].time, "avg", avg)
+                if (measurements[i][j].time > avg + (avg * 0.30)) {
                     measurements[i][j].time = avg
                 }
             }
@@ -148,6 +154,7 @@ function init() {
                 return "Memory test"
         }
     }
+    /* Chartobj = title, labels, data */
     function createSingleLineChart(chartObj) {
         const numArr = Array(chartObj.data[0].length).fill(0).map((_, i) => i);
         let title = chartObj.title
@@ -298,6 +305,82 @@ function init() {
         new Chart(canvas, chartConfig);
     }
 
+    function createSingleBarChart(chartObj) {
+        const colors = ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)']
+        let title = chartObj.title
+        let labels = chartObj.labels
+        let datasets = []
+        for (let i = 0; i < chartObj.data.length; i++) {
+            let std = parseFloat(calculateStdDev(chartObj.data[i]).toFixed(2))
+            let avg = parseFloat(calculateAverage(chartObj.data[i]).toFixed(2))
+            data = {
+                y: avg,
+                yMin: avg - std,
+                yMax: avg + std
+            }
+            datasets[i] = {
+                label: labels[i],
+                data: []
+            }
+            datasets[i].data.push(data)
+        }
+        const barChartConfig = {
+            type: "barWithErrorBars",
+            data: {
+                labels: [title],
+                datasets: datasets
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: title,
+                        font: {
+                            size: 24
+                        }
+                    },
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 20
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        title: {
+                            display: true,
+                            text: "Time (milliseconds)",
+                            font: {
+                                size: 20
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 20
+                            }
+                        },
+                        beginAtZero: true
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 20
+                            }
+                        }
+                    }
+
+                }
+            }
+        };
+
+        const chartContainer = document.querySelector('.chart-container');
+        const canvas = document.createElement('canvas');
+        canvas.id = 'new-bar-chart ' + title;
+        chartContainer.appendChild(canvas);
+        new Chart(canvas, barChartConfig);
+    }
     function createBarCharts() {
         let labels = ["All employees", "All companies", "All companies from employees", "Underfetching", "Underfetching high volume"]
         const colors = ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)']
@@ -328,7 +411,7 @@ function init() {
             datasets[n].data.push(data)
         }
         labels = labels.slice(0, datasets[0].data.length)
-        const chartConfig = {
+        const barChartConfig = {
             type: "barWithErrorBars",
             data: {
                 labels: labels,
@@ -383,12 +466,12 @@ function init() {
         const canvas = document.createElement('canvas');
         canvas.id = 'new-chart-BarChart';
         chartContainer.appendChild(canvas);
-        new Chart(canvas, chartConfig);
+        new Chart(canvas, barChartConfig);
     }
     function calculateAverage(measurements) {
         // Calculate the average of the measurements array
         const sum = measurements.reduce((acc, curr) => {
-            return acc + curr.time;
+            return parseFloat(acc + curr)
         }, 0);
         const average = sum / measurements.length;
         return average;
@@ -398,7 +481,7 @@ function init() {
         // Calculate the standard deviation of the measurements array
         const average = calculateAverage(measurements);
         const squaredDiffs = measurements.reduce((acc, curr) => {
-            const diff = curr.time - average;
+            const diff = curr - average;
             return acc + diff ** 2;
         }, 0);
         const variance = squaredDiffs / measurements.length;

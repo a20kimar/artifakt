@@ -1,4 +1,4 @@
-const raspberrypi = [
+var raspberrypi = [
   [
     {
       "time": 260.58,
@@ -30021,7 +30021,7 @@ const raspberrypi = [
   ]
 ]
 
-const ubuntu = [
+var ubuntu = [
   [
     {
       "time": 100.55,
@@ -60043,7 +60043,7 @@ const ubuntu = [
     }
   ]
 ]
-const raspberrypiMemorytest = [
+var raspberrypiMemorytest = [
   [
     {
       "time": 2065.164300084114,
@@ -60293,7 +60293,7 @@ const raspberrypiMemorytest = [
     }
   ]
 ]
-const ubuntuMemorytest = [
+var ubuntuMemorytest = [
   [
     {
       "time": 182.7101690173149,
